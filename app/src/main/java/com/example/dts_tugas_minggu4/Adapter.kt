@@ -6,13 +6,18 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 
-class Adapter(private val dataset: Array<String>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
+class Adapter(private var dataset: Array<String>) : RecyclerView.Adapter<Adapter.ViewHolder>() {
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         val button: Button
 
         init {
             button = view.findViewById(R.id.item)
         }
+    }
+
+    fun listUpdate(array: Array<String>){
+        dataset = array
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

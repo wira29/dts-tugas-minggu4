@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -60,8 +61,13 @@ class MainActivity : AppCompatActivity() {
             var startPosition = viewHolder.adapterPosition
             var endPosition = target.adapterPosition
 
-            Collections.swap(list, startPosition, endPosition)
+            var tmp = list[endPosition]
+            list[endPosition] = list[startPosition]
+            list[startPosition] = tmp
+
+//            Collections.swap(list, startPosition, endPosition)
             recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
+            recylerAdapter.listUpdate(list.toTypedArray())
 
             check()
             return true
@@ -83,14 +89,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun check() {
-        for (l in list){
-            Log.d("check", "nilai: " + l)
-        }
-//        Log.d("check", "awal: " + list.toString())
         if(isEqual(list, correctList)){
             Log.d("check", "berhasil !!")
-            Toast.makeText(this, "You win it !", Toast.LENGTH_LONG)
+            Toast.makeText(this, "You win it !", Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.ulangi -> {
+                list.shuffle()
+                recylerAdapter.listUpdate(list.toTypedArray())
+            }
+            R.id.keluar -> finish()
+        }
+        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
